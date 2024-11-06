@@ -1,0 +1,31 @@
+name: C++ CI Workflow
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+      
+    - name: Set up C++ environment
+      run: sudo apt-get install g++
+    
+    - name: Compile C++ file
+      run: g++ -o hello hello.cpp
+    
+    - name: Print Hello, CI!
+      run: echo "Hello, CI!"
+    
+    - name: Archive Executable
+      if: success()
+      uses: actions/upload-artifact@v2
+      with:
+        name: hello
+        path: hello
+    
+    - name: Fail step if build fails
+      if: failure()
+      run: exit 1
